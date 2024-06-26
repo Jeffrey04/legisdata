@@ -4,6 +4,7 @@ from enum import Enum, auto
 from functools import reduce
 from itertools import chain
 from math import inf
+from pathlib import Path
 
 import structlog
 import typedload
@@ -382,7 +383,7 @@ def guest_parse(current: Hansard, element: Element) -> Hansard:
     return current._replace(
         guest=[
             *current.guest,
-            Person(name=name[0], title=name[1:], area=None, role=role),
+            Person(name=name[0], raw=name[0], title=name[1:], area=None, role=role),
         ]
     )
 
@@ -410,7 +411,8 @@ def officer_parse(current: Hansard, element: Element) -> Hansard:
     ]
 
     return current._replace(
-        officer=current.officer + [Person(name=name, role=role) for name in names]
+        officer=current.officer
+        + [Person(name=name, raw=name, role=role) for name in names]
     )
 
 
@@ -442,7 +444,7 @@ def speakline_alternative_parse(
     return (
         HansardCache(
             # person=Person(name=name.strip("( )"), role=role),
-            speaker=Person(name=speaker),
+            speaker=Person(name=speaker, raw=speaker),
             content=[
                 ContentElement(
                     type=type(element).__name__.lower(),
@@ -462,7 +464,7 @@ def speakline_parse(
 
     return (
         HansardCache(
-            speaker=Person(name=speaker),
+            speaker=Person(name=speaker, raw=speaker),
             content=[
                 ContentElement(
                     type=type(element).__name__.lower(),
@@ -479,7 +481,7 @@ def parse(
     year: int,
     session: int,
     hansard_files: tuple[os.DirEntry[str], ...],
-    parse_path: str,
+    parse_path: Path,
 ) -> None:
     for file_idx, (file_entry, elements) in enumerate(map(unpickler, hansard_files)):
         logger.info(

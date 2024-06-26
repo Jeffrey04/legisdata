@@ -4,7 +4,7 @@ from typing import NamedTuple
 
 class Person(NamedTuple):
     name: str
-    raw: str | None = None
+    raw: str
     title: list[str] = []
     area: str | None = None
     role: str | None = None
