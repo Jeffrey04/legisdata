@@ -78,7 +78,12 @@ def akn_get_container(E: builder.ElementMaker, component: Speech | Questions):
             *[
                 E(
                     "question" if isinstance(item, Question) else "answer",
-                    E("from", item.by.name),
+                    E(
+                        "from",
+                        item.inquirer.name
+                        if isinstance(item, Question)
+                        else item.respondent.name,
+                    ),
                     E.div(*[E.p(content.value) for content in item.content]),
                 )
                 for item in component.content
@@ -160,7 +165,7 @@ def check_is_answer(current: Hansard) -> bool:
         and (
             (
                 isinstance(current.debate[-1].content[-1], Answer)
-                and current.debate[-1].content[-1].by.name in HANSARD_SPEAKERS
+                and current.debate[-1].content[-1].respondent.name in HANSARD_SPEAKERS
             )
             or not isinstance(current.debate[-1].content[-1], Answer)
         )
@@ -341,7 +346,9 @@ def cache_insert(cache: HansardCache, current: Hansard) -> Hansard:
                 *current.debate,
                 Questions(
                     content=[
-                        Question(by=cache.speaker, role=None, content=cache.content)
+                        Question(
+                            inquirer=cache.speaker, role=None, content=cache.content
+                        )
                     ]
                 ),
             ]
@@ -354,7 +361,9 @@ def cache_insert(cache: HansardCache, current: Hansard) -> Hansard:
                 lambda questions: questions._replace(
                     content=[
                         *questions.content,
-                        Answer(by=cache.speaker, role=None, content=cache.content),
+                        Answer(
+                            respondent=cache.speaker, role=None, content=cache.content
+                        ),
                     ]
                 ),
             )

@@ -91,10 +91,11 @@ class AnswerContentSerializer(serializers.ModelSerializer):
 
 class AnswerSerializer(serializers.ModelSerializer):
     content_list = AnswerContentSerializer(many=True, read_only=True)
+    respondent = PersonSerializer(many=False, read_only=True)
 
     class Meta:
         model = Answer
-        fields = ["content_list", "by", "role"]
+        fields = ["content_list", "respondent", "role"]
 
 
 class QuestionContentSerializer(serializers.ModelSerializer):
@@ -105,10 +106,11 @@ class QuestionContentSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     content_list = QuestionContentSerializer(many=True, read_only=True)
+    inquirer = PersonSerializer(many=False, read_only=True)
 
     class Meta:
         model = Question
-        fields = ["content_list", "by", "role", "is_oral"]
+        fields = ["content_list", "respondent", "role", "is_oral"]
 
 
 class QuestionSessionSerializer(serializers.ModelSerializer):

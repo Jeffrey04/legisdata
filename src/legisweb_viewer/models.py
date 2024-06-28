@@ -99,7 +99,7 @@ class Question(ContentElementList):
         QuestionSession, related_name="questions", on_delete=models.PROTECT
     )
 
-    by = models.ForeignKey(Person, on_delete=models.PROTECT)
+    inquirer = models.ForeignKey(Person, on_delete=models.PROTECT)
     role = models.CharField(null=True)
     is_oral = models.BooleanField()
 
@@ -114,7 +114,7 @@ class Answer(ContentElementList):
     session = models.ForeignKey(
         QuestionSession, related_name="answers", on_delete=models.PROTECT
     )
-    by = models.ForeignKey(Person, on_delete=models.PROTECT)
+    respondent = models.ForeignKey(Person, on_delete=models.PROTECT)
     role = models.CharField(null=True)
 
 

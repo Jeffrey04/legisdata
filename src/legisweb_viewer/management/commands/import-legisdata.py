@@ -87,7 +87,7 @@ def import_hansard(year: int, session: int, hansard_list: list[os.DirEntry]) -> 
                         question = models.Question.objects.create(
                             idx=idx_session,
                             session=questions,
-                            by=import_person(item_session.by),
+                            inquirer=import_person(item_session.inquirer),
                             role=item_session.role,
                             is_oral=item_session.is_oral,
                         )
@@ -105,7 +105,7 @@ def import_hansard(year: int, session: int, hansard_list: list[os.DirEntry]) -> 
                         answer = models.Answer.objects.create(
                             idx=idx_session,
                             session=questions,
-                            by=import_person(item_session.by),
+                            respondent=import_person(item_session.respondent),
                             role=item_session.role,
                         )
 

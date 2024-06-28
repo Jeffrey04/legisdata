@@ -43,14 +43,14 @@ class Speech(NamedTuple):
 
 
 class Question(NamedTuple):
-    by: Person
+    inquirer: Person
     role: str | None
     content: list[ContentElement]
     is_oral: bool = False
 
 
 class Answer(NamedTuple):
-    by: Person
+    respondent: Person
     role: str | None
     content: list[ContentElement]
 
