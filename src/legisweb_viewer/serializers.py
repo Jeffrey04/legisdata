@@ -94,7 +94,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answer
-        fields = ["content_list"]
+        fields = ["content_list", "by", "role"]
 
 
 class QuestionContentSerializer(serializers.ModelSerializer):
@@ -108,7 +108,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ["content_list"]
+        fields = ["content_list", "by", "role", "is_oral"]
 
 
 class QuestionSessionSerializer(serializers.ModelSerializer):
