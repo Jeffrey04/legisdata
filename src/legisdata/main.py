@@ -55,10 +55,10 @@ def download(year: int, session: int) -> None:
         "mb-1",
     )
 
-    # logger.info("Uploading downloaded archive to huggingface")
-    # api.upload_folder(
-    #    folder_path="data", repo_id="sinarproject/legisdata", repo_type="dataset"
-    # )
+    logger.info("Uploading downloaded archive to huggingface")
+    api.upload_folder(
+        folder_path="data", repo_id="sinarproject/legisdata", repo_type="dataset"
+    )
 
 
 @app.command()
@@ -104,10 +104,10 @@ def extract(year: int, session: int) -> None:
                 file_extract,
             )
 
-    # logger.info("Uploading extracted archive to huggingface")
-    # api.upload_folder(
-    #    folder_path="data", repo_id="sinarproject/legisdata", repo_type="dataset"
-    # )
+    logger.info("Uploading extracted archive to huggingface")
+    api.upload_folder(
+        folder_path="data", repo_id="sinarproject/legisdata", repo_type="dataset"
+    )
 
 
 @app.command()
@@ -139,10 +139,10 @@ def parse(year: int, session: int) -> None:
         data_get_path(path_base, ListingType.Inquiry, ListingClass.PARSE),
     )
 
-    # logger.info("Uploading parsed archive to huggingface")
-    # api.upload_folder(
-    #    folder_path="data", repo_id="sinarproject/legisdata", repo_type="dataset"
-    # )
+    logger.info("Uploading parsed archive to huggingface")
+    api.upload_folder(
+        folder_path="data", repo_id="sinarproject/legisdata", repo_type="dataset"
+    )
 
 
 def archive_download(
