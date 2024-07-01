@@ -38,7 +38,7 @@ class PersonSerializer(serializers.ModelSerializer):
 class InquiryContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = InquiryContent
-        fields = ["value", "type", "image"]
+        fields = ["id", "value", "type", "image"]
 
 
 class InquiryListSerializer(serializers.ModelSerializer):
@@ -52,7 +52,7 @@ class InquiryListSerializer(serializers.ModelSerializer):
 class RespondContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = RespondContent
-        fields = ["value", "type", "image"]
+        fields = ["id", "value", "type", "image"]
 
 
 class RespondListSerializer(serializers.ModelSerializer):
@@ -86,7 +86,7 @@ class InquirySerializer(FlexFieldsModelSerializer):
 class AnswerContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnswerContent
-        fields = ["value", "type", "image"]
+        fields = ["id", "value", "type", "image"]
 
 
 class AnswerSerializer(serializers.ModelSerializer):
@@ -101,7 +101,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 class QuestionContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionContent
-        fields = ["value", "type", "image"]
+        fields = ["id", "value", "type", "image"]
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -110,7 +110,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ["content_list", "respondent", "role", "is_oral"]
+        fields = ["content_list", "inquirer", "role", "is_oral"]
 
 
 class QuestionSessionSerializer(serializers.ModelSerializer):
@@ -125,7 +125,7 @@ class QuestionSessionSerializer(serializers.ModelSerializer):
 class SpeechContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpeechContent
-        fields = ["value", "type", "image"]
+        fields = ["id", "value", "type", "image"]
 
 
 class SpeechSerializer(serializers.ModelSerializer):

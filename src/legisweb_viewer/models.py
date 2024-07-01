@@ -49,6 +49,9 @@ class Inquiry(models.Model):
     title = models.CharField(null=True)
     akn = models.TextField()
 
+    class Meta:
+        ordering = ["number"]
+
 
 class InquiryList(ContentElementList):
     inquiry = models.ForeignKey(

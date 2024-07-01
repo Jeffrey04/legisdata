@@ -458,7 +458,7 @@ def speakline_alternative_parse(
                 ContentElement(
                     type=type(element).__name__.lower(),
                     value="".join(element.text.partition(":")[2:]).strip(),
-                    image=None,
+                    image=element.metadata.image_base64,
                 )
             ],
         ),
@@ -478,7 +478,7 @@ def speakline_parse(
                 ContentElement(
                     type=type(element).__name__.lower(),
                     value=element.text[len(speaker) :].strip(": "),
-                    image=None,
+                    image=element.metadata.image_base64,
                 )
             ],
         ),
