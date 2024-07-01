@@ -54,3 +54,6 @@ __pycache
 
 .venv
 /poetry.toml
+
+# podman data
+podman/data
