@@ -1,6 +1,4 @@
-FROM debian:12-slim as base
-
-FROM base as builder
+FROM debian:12-slim as builder
 
 ENV PATH="/root/.local/bin:${PATH}" \
     POETRY_VERSION=1.8.3
