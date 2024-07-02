@@ -5,9 +5,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: set lower case owner name
+        run: echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
       - name: Set current date as env variable
         run: echo "TODAY=$(date +'%Y%m%d')" >> $GITHUB_ENV
       - uses: actions/checkout@v4
       - run: sudo apt-get install -y podman
-      - run: podman build --tag "${{ github.repository }}-frontend:$TODAY" -f ./podman/frontend/Dockerfile .
-      - run: podman build --tag "${{ github.repository }}-backend:$TODAY" -f ./podman/backend/Dockerfile .
+      - run: podman build --tag "$OWNER/legisdata-frontend:$TODAY" -f ./podman/frontend/Dockerfile .
+      - run: podman build --tag "$OWNER/legisdata-backend:$TODAY" -f ./podman/backend/Dockerfile .
