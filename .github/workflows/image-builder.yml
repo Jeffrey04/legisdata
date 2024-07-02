@@ -9,5 +9,5 @@ jobs:
         run: echo "TODAY=$(date +'%Y%m%d')" >> $GITHUB_ENV
       - uses: actions/checkout@v4
       - run: sudo apt-get install -y podman
-      - run: podman build --tag "legisdata_frontend:$TODAY" -f ./podman/frontend/Dockerfile .
-      - run: podman build --tag "legisdata_backend:$TODAY" -f ./podman/backend/Dockerfile .
+      - run: podman build --tag "${{ github.repository }}-frontend:$TODAY" -f ./podman/frontend/Dockerfile .
+      - run: podman build --tag "${{ github.repository }}-backend:$TODAY" -f ./podman/backend/Dockerfile .
