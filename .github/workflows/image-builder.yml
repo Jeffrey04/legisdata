@@ -5,10 +5,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y%m%d')"
+      - name: Set current date as env variable
+        run: echo "TODAY=$(date +'%Y%m%d')" >> $GITHUB_ENV
       - uses: actions/checkout@v4
       - run: sudo apt-get install -y podman
-      - run: podman build --tag "legisdata_frontend:${{ steps.date.output.date }}" -f ./podman/frontend/Dockerfile .
-      - run: podman build --tag "legisdata_backend:${{ steps.date.output.date }}" -f ./podman/backend/Dockerfile .
+      - run: podman build --tag "legisdata_frontend:$TODAY" -f ./podman/frontend/Dockerfile .
+      - run: podman build --tag "legisdata_backend:$TODAY" -f ./podman/backend/Dockerfile .
