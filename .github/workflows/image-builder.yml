@@ -7,4 +7,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get install -y podman
-      - run: podman build --build-context=. --tag legisdata_frontend ./podman/frontend/Dockerfile
+      - run: podman build --tag legisdata_frontend -f ./podman/frontend/Dockerfile .
