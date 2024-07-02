@@ -15,3 +15,4 @@ jobs:
       - run: sudo apt-get install -y podman
       - run: podman build --tag "$OWNER_LC/legisdata-frontend:$TODAY" -f ./podman/frontend/Dockerfile .
       - run: podman build --tag "$OWNER_LC/legisdata-backend:$TODAY" -f ./podman/backend/Dockerfile .
+      - run: echo ${{ secrets.GITHUB_TOKEN }} | podman login ghcr.io -u ${{ github.repository_owner }} --password-stdin
