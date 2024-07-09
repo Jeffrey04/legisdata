@@ -3,6 +3,7 @@ from typing import Any
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
 
+from legisweb_viewer.documents import InquiryContentDocument
 from legisweb_viewer.models import (
     Answer,
     AnswerContent,
@@ -158,4 +159,87 @@ class HansardSerializer(FlexFieldsModelSerializer):
             "absent": (PersonSerializer, {"many": True, "read_only": True}),
             "guest": (PersonSerializer, {"many": True, "read_only": True}),
             "debate": (DebateSerializer, {"many": True, "read_only": True}),
+        }
+
+
+class InquiryContentSearchSerializer(serializers.BaseSerializer):
+    def to_representation(self, instance: InquiryContentDocument) -> dict[Any, Any]:
+        return {
+            "inquiry": {"id": instance.inquiry.id},
+            "document_type": "inquiry",
+            "content": {
+                "id": instance.id,
+                "highlight": " ".join(instance.meta.highlight.get("value", "")).strip()
+                or None,
+                "value": instance.value,
+            },
+            "person": {"name": instance.inquirer.name, "raw": instance.inquirer.raw},
+            "meta": instance.meta.to_dict(),
+        }
+
+
+class RespondContentSearchSerializer(serializers.BaseSerializer):
+    def to_representation(self, instance: InquiryContentDocument) -> dict[Any, Any]:
+        return {
+            "inquiry": instance.inquiry.id,
+            "document_type": "respond",
+            "content": {
+                "id": instance.id,
+                "highlight": " ".join(instance.meta.highlight.get("value", "")).strip()
+                or None,
+                "value": instance.value,
+            },
+            "person": {"name": instance.responder.name, "raw": instance.responder.raw},
+            "meta": instance.meta.to_dict(),
+        }
+
+
+class SpeechContentSearchSerializer(serializers.BaseSerializer):
+    def to_representation(self, instance: InquiryContentDocument) -> dict[Any, Any]:
+        return {
+            "hansard": instance.hansard.id,
+            "document_type": "speech",
+            "content": {
+                "id": instance.id,
+                "highlight": " ".join(instance.meta.highlight.get("value", "")).strip()
+                or None,
+                "value": instance.value,
+            },
+            "person": {"name": instance.by.name, "raw": instance.by.raw},
+            "meta": instance.meta.to_dict(),
+        }
+
+
+class QuestionContentSearchSerializer(serializers.BaseSerializer):
+    def to_representation(self, instance: InquiryContentDocument) -> dict[Any, Any]:
+        return {
+            "hansard": instance.hansard.id,
+            "document_type": "speech",
+            "content": {
+                "id": instance.id,
+                "highlight": " ".join(instance.meta.highlight.get("value", "")).strip()
+                or None,
+                "value": instance.value,
+            },
+            "person": {"name": instance.inquirer.name, "raw": instance.inquirer.raw},
+            "meta": instance.meta.to_dict(),
+        }
+
+
+class AnswerContentSearchSerializer(serializers.BaseSerializer):
+    def to_representation(self, instance: InquiryContentDocument) -> dict[Any, Any]:
+        return {
+            "hansard": instance.hansard.id,
+            "document_type": "speech",
+            "content": {
+                "id": instance.id,
+                "highlight": " ".join(instance.meta.highlight.get("value", "")).strip()
+                or None,
+                "value": instance.value,
+            },
+            "person": {
+                "name": instance.respondent.name,
+                "raw": instance.respondent.raw,
+            },
+            "meta": instance.meta.to_dict(),
         }

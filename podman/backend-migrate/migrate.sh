@@ -18,3 +18,5 @@ poetry run huggingface-cli download sinarproject/legisdata --repo-type dataset -
 
 poetry run python manage.py migrate
 poetry run python manage.py import-legisdata 2020 2
+poetry run python manage.py opensearch index rebuild --force
+poetry run python manage.py opensearch document index --force

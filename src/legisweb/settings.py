@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_structlog",
     "django_typer",
+    "django_opensearch_dsl",
 ]
 
 MIDDLEWARE = [
@@ -138,3 +139,16 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.AllowAny",
     ]
 }
+
+OPENSEARCH_DSL = {
+    "default": {
+        "hosts": f"{os.environ.get('OPENSEARCH_HOST', 'localhost')}:{os.environ.get('OPENSEARCH_PORT', '9200')}",
+        "http_auth": (
+            os.environ.get("OPENSEARCH_USER", "admin"),
+            os.environ.get("OPENSEARCH_INITIAL_ADMIN_PASSWORD", "admin"),
+        ),
+        "use_ssl": True,
+        "verify_certs": False,
+    }
+}
+OPENSEARCH_DSL_AUTOSYNC = os.environ.get("OPENSEARCH_DSL_AUTOSYNC", False)
