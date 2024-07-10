@@ -9,6 +9,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from legisweb_viewer.documents import (
     AnswerContentDocument,
     InquiryContentDocument,
+    InquiryTitleDocument,
     QuestionContentDocument,
     RespondContentDocument,
     SpeechContentDocument,
@@ -19,6 +20,7 @@ from legisweb_viewer.serializers import (
     HansardSerializer,
     InquiryContentSearchSerializer,
     InquirySerializer,
+    InquiryTitleSearchSerializer,
     PersonSerializer,
     QuestionContentSearchSerializer,
     RespondContentSearchSerializer,
@@ -50,7 +52,23 @@ def search(request: Request, format=None) -> Response:
     result = None
     data = SearchData(**request.data)  # type: ignore
 
+    if not data.query:
+        return Response("Bad search request", status=status.HTTP_400_BAD_REQUEST)
+
     match data.document_type:
+        case "inquiry-title":
+            hits = (
+                InquiryTitleDocument.search()
+                .query(
+                    "multi_match",
+                    query=data.query,
+                    fields=["title", "inquirer.raw", "respondent.raw"],
+                )
+                .highlight("title")
+            )
+            serializer = InquiryTitleSearchSerializer(hits, many=True)
+            result = Response(serializer.data)
+
         case "inquiry":
             hits = (
                 InquiryContentDocument.search()
@@ -100,8 +118,6 @@ def search(request: Request, format=None) -> Response:
                 )
                 .highlight("value")
             )
-            for hit in hits:
-                print(hit.to_dict(), hit.meta.highlight)
             serializer = AnswerContentSearchSerializer(hits, many=True)
             result = Response(serializer.data)
 

@@ -1,9 +1,17 @@
-from typing import Any
+from abc import ABC
+from typing import Any, Literal
 
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
 
-from legisweb_viewer.documents import InquiryContentDocument
+from legisweb_viewer.documents import (
+    AnswerContentDocument,
+    InquiryContentDocument,
+    InquiryTitleDocument,
+    QuestionContentDocument,
+    RespondContentDocument,
+    SpeechContentDocument,
+)
 from legisweb_viewer.models import (
     Answer,
     AnswerContent,
@@ -161,76 +169,54 @@ class HansardSerializer(FlexFieldsModelSerializer):
             "debate": (DebateSerializer, {"many": True, "read_only": True}),
         }
 
+class ContentElementSearchSerializer(serializers.BaseSerializer, ABC):
+    parent_type: Literal["inquiry"] | Literal["hansard"]
+    document_type: (
+        Literal["inquiry"]
+        | Literal["respond"]
+        | Literal["question"]
+        | Literal["answer"]
+        | Literal["speech"]
+    )
 
-class InquiryContentSearchSerializer(serializers.BaseSerializer):
-    def to_representation(self, instance: InquiryContentDocument) -> dict[Any, Any]:
+    def _person(
+        self,
+        instance: InquiryContentDocument
+        | RespondContentDocument
+        | SpeechContentDocument
+        | QuestionContentDocument
+        | AnswerContentDocument,
+    ) -> Any:
+        result = None
+
+        match self.document_type:
+            case "inquiry" | "question":
+                result = instance.inquirer
+
+            case "respond" | "answer":
+                result = instance.respondent
+
+            case "speech":
+                result = instance.by
+
+        return result
+
+    def _parent_id(self, instance) -> str:
+        return getattr(
+            instance, "inquiry" if self.parent_type == "inquiry" else "hansard"
+        ).id
+
+    def to_representation(
+        self,
+        instance: InquiryContentDocument
+        | RespondContentDocument
+        | SpeechContentDocument
+        | QuestionContentDocument
+        | AnswerContentDocument,
+    ) -> dict[Any, Any]:
         return {
-            "inquiry": {"id": instance.inquiry.id},
-            "document_type": "inquiry",
-            "content": {
-                "id": instance.id,
-                "highlight": " ".join(instance.meta.highlight.get("value", "")).strip()
-                or None,
-                "value": instance.value,
-            },
-            "person": {"name": instance.inquirer.name, "raw": instance.inquirer.raw},
-            "meta": instance.meta.to_dict(),
-        }
-
-
-class RespondContentSearchSerializer(serializers.BaseSerializer):
-    def to_representation(self, instance: InquiryContentDocument) -> dict[Any, Any]:
-        return {
-            "inquiry": instance.inquiry.id,
-            "document_type": "respond",
-            "content": {
-                "id": instance.id,
-                "highlight": " ".join(instance.meta.highlight.get("value", "")).strip()
-                or None,
-                "value": instance.value,
-            },
-            "person": {"name": instance.responder.name, "raw": instance.responder.raw},
-            "meta": instance.meta.to_dict(),
-        }
-
-
-class SpeechContentSearchSerializer(serializers.BaseSerializer):
-    def to_representation(self, instance: InquiryContentDocument) -> dict[Any, Any]:
-        return {
-            "hansard": instance.hansard.id,
-            "document_type": "speech",
-            "content": {
-                "id": instance.id,
-                "highlight": " ".join(instance.meta.highlight.get("value", "")).strip()
-                or None,
-                "value": instance.value,
-            },
-            "person": {"name": instance.by.name, "raw": instance.by.raw},
-            "meta": instance.meta.to_dict(),
-        }
-
-
-class QuestionContentSearchSerializer(serializers.BaseSerializer):
-    def to_representation(self, instance: InquiryContentDocument) -> dict[Any, Any]:
-        return {
-            "hansard": instance.hansard.id,
-            "document_type": "speech",
-            "content": {
-                "id": instance.id,
-                "highlight": " ".join(instance.meta.highlight.get("value", "")).strip()
-                or None,
-                "value": instance.value,
-            },
-            "person": {"name": instance.inquirer.name, "raw": instance.inquirer.raw},
-            "meta": instance.meta.to_dict(),
-        }
-
-
-class AnswerContentSearchSerializer(serializers.BaseSerializer):
-    def to_representation(self, instance: InquiryContentDocument) -> dict[Any, Any]:
-        return {
-            "hansard": instance.hansard.id,
-            "document_type": "speech",
+            self.parent_type: {"id": self._parent_id(instance)},
+            "document_type": self.document_type,
             "content": {
                 "id": instance.id,
                 "highlight": " ".join(instance.meta.highlight.get("value", "")).strip()
@@ -238,6 +224,51 @@ class AnswerContentSearchSerializer(serializers.BaseSerializer):
                 "value": instance.value,
             },
             "person": {
+                "name": self._person(instance).name,
+                "raw": self._person(instance).raw,
+            },
+            "meta": instance.meta.to_dict(),
+        }
+
+
+class InquiryContentSearchSerializer(ContentElementSearchSerializer):
+    parent_type = "inquiry"
+    document_type = "inquiry"
+
+
+class RespondContentSearchSerializer(ContentElementSearchSerializer):
+    parent_type = "inquiry"
+    document_type = "respond"
+
+
+class SpeechContentSearchSerializer(ContentElementSearchSerializer):
+    parent_type = "hansard"
+    document_type = "speech"
+
+
+class QuestionContentSearchSerializer(ContentElementSearchSerializer):
+    parent_type = "hansard"
+    document_type = "question"
+
+
+class AnswerContentSearchSerializer(ContentElementSearchSerializer):
+    parent_type = "hansard"
+    document_type = "answer"
+
+
+class InquiryTitleSearchSerializer(serializers.BaseSerializer):
+    def to_representation(self, instance: InquiryTitleDocument) -> dict[Any, Any]:
+        return {
+            "id": instance.id,
+            "title": {
+                "highlight": instance.meta.highlight.get("value", "").strip() or None,
+                "value": instance.title,
+            },
+            "inquirer": {
+                "name": instance.inquirer.name,
+                "raw": instance.inquirer.raw,
+            },
+            "respondent": {
                 "name": instance.respondent.name,
                 "raw": instance.respondent.raw,
             },
