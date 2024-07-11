@@ -215,7 +215,14 @@ class ContentElementSearchSerializer(serializers.BaseSerializer, ABC):
         | AnswerContentDocument,
     ) -> dict[Any, Any]:
         return {
-            self.parent_type: {"id": self._parent_id(instance)},
+            self.parent_type: {"id": self._parent_id(instance)}
+            if self.parent_type == "hansard"
+            else {
+                "id": self._parent_id(instance),
+                "number": instance.inquiry.number,
+                "is_oral": instance.inquiry.is_oral,
+                "title": instance.inquiry.title,
+            },
             "document_type": self.document_type,
             "content": {
                 "id": instance.id,
@@ -259,11 +266,14 @@ class AnswerContentSearchSerializer(ContentElementSearchSerializer):
 class InquiryTitleSearchSerializer(serializers.BaseSerializer):
     def to_representation(self, instance: InquiryTitleDocument) -> dict[Any, Any]:
         return {
-            "id": instance.id,
-            "title": {
+            "content": {
+                "title": instance.title,
                 "highlight": instance.meta.highlight.get("value", "").strip() or None,
-                "value": instance.title,
+                "number": instance.number,
+                "is_oral": instance.is_oral,
+                "id": instance.id,
             },
+            "document_type": "inquiry-title",
             "inquirer": {
                 "name": instance.inquirer.name,
                 "raw": instance.inquirer.raw,

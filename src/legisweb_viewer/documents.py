@@ -25,7 +25,7 @@ class InquiryTitleDocument(Document):
 
     class Django:
         model = Inquiry
-        fields = ["id", "title"]
+        fields = ["id", "title", "number", "is_oral"]
 
 
 @registry.register_document
@@ -34,7 +34,12 @@ class InquiryContentDocument(Document):
         properties={"name": fields.TextField(), "raw": fields.TextField()}
     )
     inquiry = fields.ObjectField(
-        properties={"title": fields.TextField(), "id": fields.IntegerField()}
+        properties={
+            "title": fields.TextField(),
+            "id": fields.IntegerField(),
+            "number": fields.IntegerField(),
+            "is_oral": fields.BooleanField(),
+        }
     )
 
     class Index:
@@ -51,7 +56,12 @@ class RespondContentDocument(Document):
         properties={"name": fields.TextField(), "raw": fields.TextField()}
     )
     inquiry = fields.ObjectField(
-        properties={"title": fields.TextField(), "id": fields.IntegerField()}
+        properties={
+            "title": fields.TextField(),
+            "id": fields.IntegerField(),
+            "number": fields.IntegerField(),
+            "is_oral": fields.BooleanField(),
+        }
     )
 
     class Index:

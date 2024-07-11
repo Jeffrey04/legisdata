@@ -148,7 +148,11 @@ OPENSEARCH_DSL = {
             os.environ.get("OPENSEARCH_INITIAL_ADMIN_PASSWORD", "admin"),
         ),
         "use_ssl": True,
-        "verify_certs": False,
+        "verify_certs": bool(int(os.environ.get("OPENSEARCH_VERIFY_CERTS", "0"))),
+        "ssl_show_warn": bool(int(os.environ.get("OPENSEARCH_SSL_SHOW_WARN", "0"))),
+        "ca_certs": os.environ.get("OPENSEARCH_CA_CERTS", "root-ca.pem"),
+        "client_cert": os.environ.get("OPENSEARCH_CLIENT_CERT", "client.pem"),
+        "client_key": os.environ.get("OPENSEARCH_CLIENT_KEY", "client-key.pem"),
     }
 }
 OPENSEARCH_DSL_AUTOSYNC = os.environ.get("OPENSEARCH_DSL_AUTOSYNC", False)
