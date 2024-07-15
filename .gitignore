@@ -59,4 +59,4 @@ __pycache
 /poetry.toml
 
 # podman data
-podman/caddy/data
+podman/frontend/data
