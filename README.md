@@ -12,10 +12,11 @@ You will need the following:
 1. Python 3.11
 1. Podman
 1. OpenSSL
+1. Caddy
 1. Poetry ([installation instruction](https://python-poetry.org/docs/))
 1. Yarn ([installation instruction](https://yarnpkg.com/getting-started/install))
+1. A huggingface account
 1. In order to parse the documents, you may need a GPU (Project is developed with an NVIDIA GTX1070)
-1. A huggingface login
 
 ### Installation
 
@@ -142,4 +143,4 @@ Remember to setup your [huggingface token](https://huggingface.co/docs/transform
 bash ./scripts/migrate.sh
 ```
 
-Finally, the website can be accessed by `<YOUR URL>` (or just `localhost`) you specified in the respective `.env` or `.env.docker` file at port `8080`. In order to deploy it in a network, append your URL to `ALLOWED_HOSTS` in the corresponding `.env` or `.env.docker` file.
+Finally, the website can be accessed at `localhost:8080`. In order to deploy it to a network, append your URL to `ALLOWED_HOSTS` in the corresponding `.env` or `.env.docker` file.
