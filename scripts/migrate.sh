@@ -6,5 +6,5 @@ podman run \
     --env-file .env.docker \
     --mount type=bind,source="$(pwd)",target=/project \
     --workdir /project \
-    --network $(NETWORK) \
+    --network "$NETWORK" \
     python:3.11-slim bash podman/backend-migrate/migrate.sh

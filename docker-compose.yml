@@ -71,3 +71,4 @@ volumes:
 
 networks:
   legisdata:
+    name: legisdata
