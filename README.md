@@ -96,13 +96,15 @@ OPENSEARCH_USER=admin
 OPENSEARCH_CA_CERTS=./certificates/root/root-ca.pem
 ```
 
+Next you will need to compose a `internal_users.yml` (with sample [here](https://opensearch.org/docs/latest/security/configuration/yaml/#internal_usersyml)) and save the file to `./podman/opensearch/usr/share/opensearch/config/opensearch-security/internal_users.yml`. Ensure the password matches the configuration settings in `.env`.
+
 Then start all the servers in one terminal emulator
 
 ```
 make -j10 dev
 ```
 
-After everything is started properly, import the parsed data into the database with
+After everything is started properly, import the parsed data into the database with in another terminal emulator window/tab
 ```
 make migrate
 ```
@@ -137,7 +139,15 @@ bootstrap.memory_lock=true
 "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
 ```
 
-Remember to setup your [huggingface token](https://huggingface.co/docs/transformers.js/en/guides/private) and specify the dataset repository ID (e.g. `sinarproject/legisdata`). After all the services are up, run the migration script:
+Next you will need to compose a `internal_users.yml` (with sample [here](https://opensearch.org/docs/latest/security/configuration/yaml/#internal_usersyml)) and save the file to `./podman/opensearch/usr/share/opensearch/config/opensearch-security/internal_users.yml`. Ensure the password matches the configuration settings in `.env.docker`.
+
+Remember to setup your [huggingface token](https://huggingface.co/docs/transformers.js/en/guides/private) and specify the dataset repository ID (e.g. `sinarproject/legisdata`). After all the services are up by running the following command in one terminal emulator,
+
+```
+podman compose up
+```
+
+run the migration script in another terminal emulator window/tab
 
 ```
 bash ./scripts/migrate.sh
