@@ -149,7 +149,8 @@ OPENSEARCH_DSL = {
         ),
         "use_ssl": True,
         "verify_certs": bool(int(os.environ.get("OPENSEARCH_VERIFY_CERTS", "0"))),
-        "ssl_show_warn": bool(int(os.environ.get("OPENSEARCH_SSL_SHOW_WARN", "0"))),
+        "ssl_show_warn": bool(int(os.environ.get("OPENSEARCH_SSL_SHOW_WARN", "1"))),
+        "ssl_assert_hostname": False,
         "ca_certs": os.environ.get("OPENSEARCH_CA_CERTS", "root-ca.pem"),
     }
 }

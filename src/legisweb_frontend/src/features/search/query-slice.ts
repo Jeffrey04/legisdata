@@ -1,6 +1,6 @@
 import { type PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-interface QueryState {
+export interface QueryState {
 	queryText: string | null;
 	documentType: string | null;
 }

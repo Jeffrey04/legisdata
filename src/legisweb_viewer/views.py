@@ -47,10 +47,12 @@ class HansardViewSet(ReadOnlyModelViewSet):
     queryset = Hansard.objects.all()
     serializer_class = HansardSerializer
 
-@api_view(["POST"])
+@api_view(["GET"])
 def search(request: Request, format=None) -> Response:
     result = None
-    data = SearchData(**request.data)  # type: ignore
+    data = SearchData(
+        **{key: request.query_params.get(key) for key in request.query_params.keys()}
+    )
 
     if not data.query:
         return Response("Bad search request", status=status.HTTP_400_BAD_REQUEST)

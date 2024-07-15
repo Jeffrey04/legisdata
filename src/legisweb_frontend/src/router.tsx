@@ -64,16 +64,17 @@ const router = createBrowserRouter([
 						return undefined;
 					}
 
-					return fetch("/api/search", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
+					return fetch(
+						"/api/search?".concat(
+							new URLSearchParams({
+								query: data.get("queryText") ?? "",
+								document_type: data.get("documentType") ?? "",
+							}).toString(),
+						),
+						{
+							method: "GET",
 						},
-						body: JSON.stringify({
-							query: data.get("queryText"),
-							document_type: data.get("documentType"),
-						}),
-					});
+					);
 				},
 			},
 		],

@@ -41,7 +41,6 @@ function Home() {
 
 function Navigation() {
   const dispatch = useDispatch();
-		const query = useSelector((state: RootState) => state.query.queryText);
 		const submitForm = useSubmit();
 		const location = useLocation();
 
@@ -70,9 +69,11 @@ function Navigation() {
 								onSubmit={(e) => {
 									e.preventDefault();
 									const data = {
+										// @ts-expect-error DOM
 										queryText: e.target.querySelector("#quick-search-query")
 											.value,
 										documentType:
+											// @ts-expect-error DOM
 											e.target.querySelector("#quick-search-type").value,
 									};
 									dispatch(submit(data));
@@ -82,7 +83,8 @@ function Navigation() {
 										action: "/search",
 									});
 
-									e.target.reset();
+									// @ts-expect-error DOM
+									e.target?.reset();
 								}}
 							>
 								<InputGroup>
@@ -235,7 +237,7 @@ function FooterLinks({
 			<h5>{header}</h5>
 			<ul>
 				{linkList.map((item, idx) => (
-					<li key={idx}>
+					<li key={"li-".concat(idx.toString())}>
 						<Link
 							className="link-secondary link-underline-opacity-0"
 							to={item.link}
